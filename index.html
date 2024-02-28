@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora SAME</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        input[type="time"] {
+            width: calc(100% - 12px);
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 48%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultado {
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de lapsos de tiempo</h2>
+        <label for="horaInicio">Hora de inicio:</label>
+        <input type="time" id="horaInicio">
+
+        <label for="horaSalida">Hora de salida:</label>
+        <input type="time" id="horaSalida">
+
+        <div class="btn-container">
+            <button onclick="calcularLapsoTiempo()">Calcular</button>
+            <button onclick="limpiarTotalHoras()">Limpiar total</button>
+        </div>
+        
+        <p id="resultado"></p>
+    </div>
+<script>
+    var totalHoras = 0;
+    var totalMinutos = 0;
+
+    function calcularLapsoTiempo() {
+        var horaInicio = document.getElementById('horaInicio').value;
+        var horaSalida = document.getElementById('horaSalida').value;
+
+        if (horaInicio === '' || horaSalida === '') {
+            alert('Por favor, ingrese la hora de inicio y la hora de salida.');
+            return;
+        }
+
+        var fechaInicio = new Date('1970-01-01T' + horaInicio + 'Z');
+        var fechaSalida = new Date('1970-01-02T' + horaSalida + 'Z'); // Agregamos 1 día para manejar correctamente las horas pasadas de la medianoche
+
+        var lapsoMillis = fechaSalida - fechaInicio;
+
+        var lapsoHoras = Math.floor((lapsoMillis / (1000 * 60 * 60)) % 24);
+        var lapsoMinutos = Math.floor((lapsoMillis / (1000 * 60)) % 60);
+
+        totalHoras += lapsoHoras;
+        totalMinutos += lapsoMinutos;
+
+        while (totalMinutos >= 60) {
+            totalHoras++;
+            totalMinutos -= 60;
+        }
+
+        document.getElementById('resultado').innerHTML = 'El lapso de tiempo total es: ' + totalHoras + ' horas y ' + totalMinutos + ' minutos.';
+
+        // Limpiar los valores de los campos de entrada
+        document.getElementById('horaInicio').value = '';
+        document.getElementById('horaSalida').value = '';
+    }
+
+    function limpiarTotalHoras() {
+        totalHoras = 0;
+        totalMinutos = 0;
+        document.getElementById('resultado').innerHTML = 'El lapso de tiempo total es: 0 horas y 0 minutos.';
+    }
+</script>
+</body>
+</html>
